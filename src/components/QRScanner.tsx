@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Html5Qrcode } from 'html5-qrcode';
+import { Html5Qrcode } from "html5-qrcode";
+
 import { findStudentByQR, markAttendance } from '@/utils/storage';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
@@ -29,8 +30,11 @@ const QRScanner = () => {
     try {
       // Pedir permiso explícito para cámara trasera antes de iniciar scanner
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } }
+        video: true
       });
+      console.log("Stream obtenido:", stream);
+console.log("qr-scanner-container:", document.getElementById("qr-scanner-container"));
+
       stream.getTracks().forEach(track => track.stop()); // detener para liberar cámara
 
       const html5QrCode = new Html5Qrcode("qr-scanner-container");
