@@ -1,117 +1,96 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Html5Qrcode } from "html5-qrcode";
+import React, { useState, useRef } from 'react';
+import { BrowserMultiFormatReader } from '@zxing/browser';
 
 import { findStudentByQR, markAttendance } from '@/utils/storage';
 import { Button } from '@/components/ui/button';
-import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Smartphone, Camera, CameraOff } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { toast } from '@/hooks/use-toast';
 
 const QRScanner = () => {
   const [scanning, setScanning] = useState(false);
   const [cameraError, setCameraError] = useState(false);
   const [scanResult, setScanResult] = useState(null);
-  const html5QrCodeRef = useRef(null);
-
-  useEffect(() => {
-    // Cleanup scanner on unmount
-    return () => {
-      if (html5QrCodeRef.current && html5QrCodeRef.current.isScanning) {
-        html5QrCodeRef.current.stop().catch(() => {});
-      }
-    };
-  }, []);
+  const videoRef = useRef(null);
+  const codeReaderRef = useRef(null);
 
   const startScanning = async () => {
     setScanResult(null);
     setCameraError(false);
-
+    setScanning(true);
     try {
-      // Iniciar el escaneo directamente con Html5Qrcode, sin pedir stream manualmente
-      const html5QrCode = new Html5Qrcode("qr-scanner-container");
-      html5QrCodeRef.current = html5QrCode;
-
-      await html5QrCode.start(
-        { facingMode: "environment" },
-        {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-        },
-        (decodedText) => {
-          handleScan(decodedText);
-        },
-        (errorMessage) => {
-          console.log("QR scanning error:", errorMessage);
+      const codeReader = new BrowserMultiFormatReader();
+      codeReaderRef.current = codeReader;
+      const videoInputDevices = await BrowserMultiFormatReader.listVideoInputDevices();
+      // Selecciona la cámara trasera si está disponible
+      let deviceId = videoInputDevices[0]?.deviceId;
+      for (const device of videoInputDevices) {
+        if (device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('trasera')) {
+          deviceId = device.deviceId;
+          break;
         }
-      );
-
-      setScanning(true);
+      }
+      codeReader.decodeFromVideoDevice(deviceId, videoRef.current, (result, err) => {
+        if (result) {
+          handleScan(result.getText());
+        }
+        if (err && !(err instanceof codeReader.NotFoundException)) {
+          console.error('Error de escaneo:', err);
+        }
+      });
     } catch (error) {
-      console.error("Error starting scanner:", error);
       setCameraError(true);
       setScanning(false);
       toast({
-        title: "Error",
-        description: "No se pudo iniciar la cámara trasera. Verifica permisos y disponibilidad.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'No se pudo iniciar la cámara. Verifica permisos y compatibilidad.',
+        variant: 'destructive',
       });
     }
   };
 
   const stopScanning = () => {
-    if (html5QrCodeRef.current && html5QrCodeRef.current.isScanning) {
-      html5QrCodeRef.current
-        .stop()
-        .then(() => {
-          console.log("Scanner stopped");
-        })
-        .catch((err) => {
-          console.error("Error stopping scanner:", err);
-        });
-    }
     setScanning(false);
+    if (codeReaderRef.current) {
+      codeReaderRef.current.reset();
+      codeReaderRef.current = null;
+    }
   };
 
   const handleScan = (result) => {
-    if (!result) return;
-
     stopScanning();
-
     const student = findStudentByQR(result);
-
     if (!student) {
       setScanResult({
         success: false,
-        message: "QR no reconocido. Este alumno no está registrado.",
+        message: 'QR no reconocido. Este alumno no está registrado.',
         isFirstTime: false,
       });
       toast({
-        title: "Error",
-        description: "QR no reconocido",
-        variant: "destructive",
+        title: 'Error',
+        description: 'QR no reconocido',
+        variant: 'destructive',
       });
       return;
     }
-
     const isFirstTime = !student.attended;
-
     if (isFirstTime) {
       markAttendance(result);
       setScanResult({
         success: true,
-        message: "¡Asistencia registrada exitosamente!",
+        message: '¡Asistencia registrada exitosamente!',
         isFirstTime: true,
         studentName: student.name,
       });
       toast({
-        title: "Éxito",
+        title: 'Éxito',
         description: `Asistencia registrada para ${student.name}`,
       });
     } else {
       setScanResult({
         success: true,
-        message: "Este estudiante ya fue registrado anteriormente",
+        message: 'Este estudiante ya fue registrado anteriormente',
         isFirstTime: false,
         studentName: student.name,
       });
@@ -142,7 +121,7 @@ const QRScanner = () => {
           <CameraOff className="h-4 w-4" />
           <AlertTitle>Error de acceso a la cámara</AlertTitle>
           <AlertDescription>
-            <p>No se pudo acceder a la cámara trasera. Por favor verifica:</p>
+            <p>No se pudo acceder a la cámara. Por favor verifica:</p>
             <ul className="list-disc ml-5 mt-2">
               <li>Que hayas dado permisos de cámara al navegador</li>
               <li>Que no haya otra aplicación usando la cámara</li>
@@ -162,10 +141,7 @@ const QRScanner = () => {
             <CardTitle className="text-center">Escanea el Código QR</CardTitle>
           </CardHeader>
           <CardContent>
-            <div
-              id="qr-scanner-container"
-              style={{ width: '100%', minHeight: '300px' }}
-            ></div>
+            <video ref={videoRef} style={{ width: '100%', minHeight: '300px' }} />
             <Button onClick={stopScanning} variant="outline" className="mt-4 w-full">
               Cancelar
             </Button>
