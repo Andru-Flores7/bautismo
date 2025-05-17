@@ -23,6 +23,9 @@ const QRScanner = () => {
       const codeReader = new BrowserMultiFormatReader();
       codeReaderRef.current = codeReader;
       const videoInputDevices = await BrowserMultiFormatReader.listVideoInputDevices();
+      if (!videoInputDevices || videoInputDevices.length === 0) {
+        throw new Error('No se detectó ninguna cámara en el dispositivo.');
+      }
       // Selecciona la cámara trasera si está disponible
       let deviceId = videoInputDevices[0]?.deviceId;
       for (const device of videoInputDevices) {
@@ -35,7 +38,16 @@ const QRScanner = () => {
         if (result) {
           handleScan(result.getText());
         }
-        if (err && !(err instanceof codeReader.NotFoundException)) {
+        if (err && err.name === 'NotReadableError') {
+          setCameraError(true);
+          setScanning(false);
+          toast({
+            title: 'Error',
+            description: 'No se pudo acceder a la cámara. Puede estar en uso por otra aplicación o bloqueada por el sistema.',
+            variant: 'destructive',
+          });
+        } else if (err && err.name !== 'NotFoundException') {
+          // NotFoundException es un nombre de error estándar en ZXing
           console.error('Error de escaneo:', err);
         }
       });
@@ -44,7 +56,7 @@ const QRScanner = () => {
       setScanning(false);
       toast({
         title: 'Error',
-        description: 'No se pudo iniciar la cámara. Verifica permisos y compatibilidad.',
+        description: error.message || 'No se pudo iniciar la cámara. Verifica permisos y compatibilidad.',
         variant: 'destructive',
       });
     }
