@@ -34,8 +34,12 @@ const QRScanner = () => {
           break;
         }
       }
-      codeReader.decodeFromVideoDevice(deviceId, videoRef.current, (result, err) => {
+      codeReader.decodeFromVideoDevice(deviceId, videoRef.current, async (result, err, controls) => {
         if (result) {
+          // Detener el escaneo inmediatamente después de leer un QR válido
+          if (controls && typeof controls.stop === 'function') {
+            await controls.stop();
+          }
           handleScan(result.getText());
         }
         if (err && err.name === 'NotReadableError') {
