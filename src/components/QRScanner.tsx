@@ -28,15 +28,7 @@ const QRScanner = () => {
     setCameraError(false);
 
     try {
-      // Pedir permiso explícito para cámara trasera antes de iniciar scanner
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true
-      });
-      console.log("Stream obtenido:", stream);
-console.log("qr-scanner-container:", document.getElementById("qr-scanner-container"));
-
-      stream.getTracks().forEach(track => track.stop()); // detener para liberar cámara
-
+      // Iniciar el escaneo directamente con Html5Qrcode, sin pedir stream manualmente
       const html5QrCode = new Html5Qrcode("qr-scanner-container");
       html5QrCodeRef.current = html5QrCode;
 
