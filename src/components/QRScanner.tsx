@@ -36,10 +36,14 @@ const QRScanner = () => {
       }
       codeReader.decodeFromVideoDevice(deviceId, videoRef.current, async (result, err, controls) => {
         if (result) {
+          console.log('QR leído:', result.getText());
           // Detener el escaneo inmediatamente después de leer un QR válido
           if (controls && typeof controls.stop === 'function') {
             await controls.stop();
           }
+          // Mostrar todos los alumnos registrados para depuración
+          const alumnos = JSON.parse(localStorage.getItem('students') || '[]');
+          console.log('Alumnos registrados:', alumnos);
           handleScan(result.getText());
         }
         if (err && err.name === 'NotReadableError') {
@@ -76,6 +80,7 @@ const QRScanner = () => {
 
   const handleScan = (result) => {
     stopScanning();
+    console.log('Valor recibido por el escáner:', result);
     const student = findStudentByQR(result);
     if (!student) {
       setScanResult({
