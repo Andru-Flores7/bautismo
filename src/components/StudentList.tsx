@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { onSnapshot, collection } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { getStudents as getStudentsFirestore, Student } from '@/utils/firestoreStudents';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
@@ -15,22 +17,22 @@ const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchStudents = async () => {
-      setLoading(true);
-      try {
-        const students = await getStudentsFirestore();
-        setStudents(students);
-      } catch (error) {
-        toast({
-          title: 'Error',
-          description: 'No se pudieron cargar los alumnos',
-          variant: 'destructive',
-        });
-      }
+    setLoading(true);
+    // Suscripción en tiempo real a la colección de alumnos
+    const unsubscribe = onSnapshot(collection(db, 'students'), (snapshot) => {
+      const students = snapshot.docs.map((doc) => doc.data() as Student);
+      setStudents(students);
       setLoading(false);
-    };
-    fetchStudents();
-  }, [refreshTrigger]);
+    }, (error) => {
+      toast({
+        title: 'Error',
+        description: 'No se pudieron cargar los alumnos',
+        variant: 'destructive',
+      });
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
   // Format date for display
   const formatDate = (dateString?: string) => {

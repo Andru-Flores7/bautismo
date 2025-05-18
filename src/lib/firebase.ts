@@ -10,9 +10,10 @@ const firebaseConfig = {
   apiKey: "AIzaSyCVu0_RQb8XKStb6DOqdW_QwYTyz6tbLB0",
   authDomain: "alumnos-66525.firebaseapp.com",
   projectId: "alumnos-66525",
-storageBucket: "alumnos-66525.appspot.com",
+  storageBucket: "alumnos-66525.firebasestorage.app",
+
   messagingSenderId: "5704294745",
-  appId: "1:5704294745:web:bde7b521e8673721f16c48"
+  appId: "1:5704294745:web:bde7b521e8673721f16c48",
 };
 
 const app = initializeApp(firebaseConfig);
