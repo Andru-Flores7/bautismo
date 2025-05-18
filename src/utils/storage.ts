@@ -1,4 +1,3 @@
-
 export interface Student {
   id: string;
   name: string;
@@ -28,8 +27,8 @@ export const addStudent = (name: string): Student => {
   // Create a unique ID
   const id = Date.now().toString();
   
-  // Create QR code data (just using the ID for simplicity)
-  const qrCode = id;
+  // QR code ahora contiene id y nombre
+  const qrCode = `${id}:${name}`;
   
   const newStudent: Student = {
     id,
@@ -47,8 +46,10 @@ export const addStudent = (name: string): Student => {
 
 // Find student by QR code
 export const findStudentByQR = (qrCode: string): Student | undefined => {
+  // Si el QR contiene ':', extraer solo el id
+  const id = qrCode.includes(':') ? qrCode.split(':')[0] : qrCode;
   const students = getStudents();
-  return students.find(student => student.qrCode === qrCode);
+  return students.find(student => student.id === id);
 };
 
 // Mark student as attended

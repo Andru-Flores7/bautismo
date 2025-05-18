@@ -81,12 +81,23 @@ const QRScanner = () => {
   const handleScan = async (result) => {
     stopScanning();
     console.log('Valor recibido por el escáner:', result);
+    // Extraer nombre si el QR tiene formato id:nombre
+    let nombreQR = '';
+    let id = result;
+    if (result.includes(':')) {
+      const partes = result.split(':');
+      id = partes[0];
+      nombreQR = partes.slice(1).join(':');
+    }
     const student = findStudentByQR(result);
     if (!student) {
       setScanResult({
         success: false,
-        message: 'QR no reconocido. Este alumno no está registrado.',
+        message: nombreQR
+          ? `QR no reconocido. Nombre leído: ${nombreQR}`
+          : 'QR no reconocido. Este alumno no está registrado.',
         isFirstTime: false,
+        studentName: nombreQR || undefined,
       });
       toast({
         title: 'Error',
