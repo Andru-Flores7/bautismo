@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { onSnapshot, collection } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { getStudents as getStudentsFirestore, Student } from '@/utils/firestoreStudents';
+import { getStudents, deleteStudent, Student } from '@/utils/storage';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,21 +16,10 @@ const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
 
   useEffect(() => {
     setLoading(true);
-    // Suscripción en tiempo real a la colección de alumnos
-    const unsubscribe = onSnapshot(collection(db, 'students'), (snapshot) => {
-      const students = snapshot.docs.map((doc) => doc.data() as Student);
-      setStudents(students);
-      setLoading(false);
-    }, (error) => {
-      toast({
-        title: 'Error',
-        description: 'No se pudieron cargar los alumnos',
-        variant: 'destructive',
-      });
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+    const students = getStudents();
+    setStudents(students);
+    setLoading(false);
+  }, [refreshTrigger]);
 
   // Format date for display
   const formatDate = (dateString?: string) => {
@@ -97,6 +84,14 @@ const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
                     <Button 
                       variant="destructive" 
                       size="sm"
+                      onClick={() => {
+                        if (deleteStudent(student.id)) {
+                          setStudents(getStudents());
+                          toast({ title: 'Eliminado', description: 'Alumno eliminado correctamente.' });
+                        } else {
+                          toast({ title: 'Error', description: 'No se pudo eliminar el alumno.', variant: 'destructive' });
+                        }
+                      }}
                     >
                       Eliminar
                     </Button>

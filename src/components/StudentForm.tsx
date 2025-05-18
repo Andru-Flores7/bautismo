@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { addStudent as addStudentFirestore } from '@/utils/firestoreStudents';
+import { addStudent } from '@/utils/storage';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -18,9 +18,9 @@ const StudentForm: React.FC<StudentFormProps> = ({ onStudentAdded }) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const student = await addStudentFirestore(name);
+      addStudent(name);
       setName("");
-      onStudentAdded(); // No pasar argumentos, según la definición del prop
+      onStudentAdded();
     } catch (error) {
       toast({
         title: "Error",
