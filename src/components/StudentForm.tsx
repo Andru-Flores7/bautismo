@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { addStudent } from '@/utils/storage';
+import { addStudent as addStudentFirestore } from '@/utils/firestoreStudents';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -15,29 +14,13 @@ const StudentForm: React.FC<StudentFormProps> = ({ onStudentAdded }) => {
   const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!name.trim()) {
-      toast({
-        title: "Error",
-        description: "Por favor ingresa un nombre",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     setIsSubmitting(true);
-    
-    // Add student to storage
     try {
-      addStudent(name.trim());
-      toast({
-        title: "Éxito",
-        description: "Alumno registrado correctamente",
-      });
-      setName('');
-      onStudentAdded();
+      const student = await addStudentFirestore(name);
+      setName("");
+      onStudentAdded(); // No pasar argumentos, según la definición del prop
     } catch (error) {
       toast({
         title: "Error",
@@ -45,7 +28,6 @@ const StudentForm: React.FC<StudentFormProps> = ({ onStudentAdded }) => {
         variant: "destructive",
       });
     }
-    
     setIsSubmitting(false);
   };
 

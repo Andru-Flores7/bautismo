@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { getStudents, Student, deleteStudent } from '@/utils/storage';
+import { getStudents as getStudentsFirestore, Student } from '@/utils/firestoreStudents';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,45 +15,22 @@ const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load students from storage
-    const loadStudents = () => {
+    const fetchStudents = async () => {
       setLoading(true);
       try {
-        const loadedStudents = getStudents();
-        setStudents(loadedStudents);
+        const students = await getStudentsFirestore();
+        setStudents(students);
       } catch (error) {
         toast({
-          title: "Error",
-          description: "No se pudieron cargar los alumnos",
-          variant: "destructive",
+          title: 'Error',
+          description: 'No se pudieron cargar los alumnos',
+          variant: 'destructive',
         });
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
-
-    loadStudents();
+    fetchStudents();
   }, [refreshTrigger]);
-
-  const handleDelete = (id: string) => {
-    if (window.confirm("¿Estás seguro de eliminar a este alumno?")) {
-      const success = deleteStudent(id);
-      
-      if (success) {
-        setStudents(students.filter(student => student.id !== id));
-        toast({
-          title: "Éxito",
-          description: "Alumno eliminado correctamente",
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: "No se pudo eliminar al alumno",
-          variant: "destructive",
-        });
-      }
-    }
-  };
 
   // Format date for display
   const formatDate = (dateString?: string) => {
@@ -119,7 +95,6 @@ const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
                     <Button 
                       variant="destructive" 
                       size="sm"
-                      onClick={() => handleDelete(student.id)}
                     >
                       Eliminar
                     </Button>

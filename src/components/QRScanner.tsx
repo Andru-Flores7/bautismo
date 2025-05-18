@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { BrowserMultiFormatReader } from '@zxing/browser';
 
-import { findStudentByQR, markAttendance } from '@/utils/storage';
+import { findStudentByQR as findStudentByQRFirestore, markAttendance as markAttendanceFirestore } from '@/utils/firestoreStudents';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Smartphone, Camera, CameraOff } from 'lucide-react';
@@ -78,10 +78,10 @@ const QRScanner = () => {
     }
   };
 
-  const handleScan = (result) => {
+  const handleScan = async (result) => {
     stopScanning();
     console.log('Valor recibido por el escáner:', result);
-    const student = findStudentByQR(result);
+    const student = await findStudentByQRFirestore(result);
     if (!student) {
       setScanResult({
         success: false,
@@ -97,7 +97,7 @@ const QRScanner = () => {
     }
     const isFirstTime = !student.attended;
     if (isFirstTime) {
-      markAttendance(result);
+      await markAttendanceFirestore(result);
       setScanResult({
         success: true,
         message: '¡Asistencia registrada exitosamente!',
