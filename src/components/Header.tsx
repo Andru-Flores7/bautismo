@@ -13,14 +13,16 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-orange-500 text-white tiger-header py-4 px-4">
-      <nav className="container mx-auto flex flex-col sm:flex-row items-center justify-between">
-        <Link to="/" className="font-bold text-2xl text-white mb-4 sm:mb-0 flex items-center">
-          <img src={tigreImg} alt="Tigre" className="h-16 w-16 mr-2 bg-color-transparent" />
-          <span>Tigres QR</span>
+    <header className="bg-orange-500 text-white tiger-header py-2 px-2">
+      <nav className="container mx-auto flex flex-col sm:flex-row items-center justify-between min-h-0">
+        <Link to="/" className="font-bold text-2xl text-white mb-2 sm:mb-0 flex items-center min-h-0">
+          <img src={tigreImg} alt="Tigre" className="h-28 w-28 mr-3 bg-color-transparent flex-shrink-0" style={{minWidth: '7rem', minHeight: '7rem', height: '7rem', width: '7rem'}} />
+          <div className="flex flex-col justify-center">
+            <span className="leading-tight">Tigres QR</span>
+            <span className="text-orange-400 font-extrabold uppercase text-lg tracking-widest leading-tight" style={{letterSpacing: '0.15em', textShadow: '1px 1px 3px rgba(0,0,0,0.15)'}}>LA GLORIOSA</span>
+          </div>
         </Link>
-        
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-2 sm:mt-0">
           <Button
             variant={isActive("/") ? "default" : "outline"}
             asChild
