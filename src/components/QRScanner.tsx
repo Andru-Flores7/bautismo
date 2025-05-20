@@ -46,16 +46,8 @@ const QRScanner = () => {
           console.log('Alumnos registrados:', alumnos);
           handleScan(result.getText());
         }
-        if (err && err.name === 'NotReadableError') {
-          setCameraError(true);
-          setScanning(false);
-          toast({
-            title: 'Error',
-            description: 'No se pudo acceder a la cámara. Puede estar en uso por otra aplicación o bloqueada por el sistema.',
-            variant: 'destructive',
-          });
-        } else if (err && err.name !== 'NotFoundException') {
-          // NotFoundException es un nombre de error estándar en ZXing
+        // Solo mostrar el error si no hay resultado y el error no es NotFoundException
+        if (!result && err && err.name !== 'NotFoundException' && err.name !== 'NotFoundError') {
           toast({
             title: 'Error de escaneo',
             description: 'No se pudo detectar ningún código QR válido. Asegúrate de que el QR esté bien enfocado, con buen contraste y completamente visible.',
