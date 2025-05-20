@@ -136,12 +136,12 @@ const QRScanner = () => {
     <div className="space-y-4">
       {!scanning && !scanResult && !cameraError && (
         <div className="flex flex-col items-center space-y-4 p-4">
-          <Smartphone className="h-16 w-16 text-primary" />
-          <h3 className="text-xl font-medium">Escanear Código QR</h3>
-          <p className="text-center text-muted-foreground">
+          <Smartphone className="h-16 w-16 text-orange-400" />
+          <h3 className="text-xl font-medium text-orange-400">Escanear Código QR</h3>
+          <p className="text-center text-orange-200">
             Haz clic en el botón para escanear el código QR del alumno
           </p>
-          <Button onClick={startScanning} className="w-full">
+          <Button onClick={startScanning} className="w-full bg-orange-500 hover:bg-black active:bg-black focus:bg-black text-white transition-colors">
             <Camera className="mr-2" />
             Iniciar Escaneo (Cámara Trasera)
           </Button>
@@ -150,9 +150,9 @@ const QRScanner = () => {
 
       {cameraError && !scanning && !scanResult && (
         <Alert variant="destructive">
-          <CameraOff className="h-4 w-4" />
-          <AlertTitle>Error de acceso a la cámara</AlertTitle>
-          <AlertDescription>
+          <CameraOff className="h-4 w-4 text-orange-400" />
+          <AlertTitle className="text-orange-400">Error de acceso a la cámara</AlertTitle>
+          <AlertDescription className="text-orange-200">
             <p>No se pudo acceder a la cámara. Por favor verifica:</p>
             <ul className="list-disc ml-5 mt-2">
               <li>Que hayas dado permisos de cámara al navegador</li>
@@ -160,7 +160,7 @@ const QRScanner = () => {
               <li>Que estés usando un navegador compatible (Chrome o Safari recomendados)</li>
               <li>Si estás en un dispositivo móvil, intenta recargar la página</li>
             </ul>
-            <Button onClick={startScanning} className="mt-4">
+            <Button onClick={startScanning} className="mt-4 bg-orange-500 hover:bg-black active:bg-black focus:bg-black text-white transition-colors">
               Intentar nuevamente
             </Button>
           </AlertDescription>
@@ -192,19 +192,19 @@ const QRScanner = () => {
           }
         >
           {scanResult.success && scanResult.isFirstTime && (
-            <Check className="h-4 w-4 text-green-500" />
+            <Check className="h-4 w-4 text-orange-400" />
           )}
-          <AlertTitle>
+          <AlertTitle className="text-orange-400">
             {scanResult.success
               ? scanResult.isFirstTime
                 ? '¡Asistencia Registrada!'
                 : 'Alumno Verificado'
               : 'No Registrado'}
           </AlertTitle>
-          <AlertDescription>
+          <AlertDescription className="text-orange-200">
             {scanResult.success ? (
               <>
-                <div className="font-medium">{scanResult.studentName}</div>
+                <div className="font-medium text-orange-400">{scanResult.studentName}</div>
                 <div>{scanResult.message}</div>
               </>
             ) : (
@@ -212,7 +212,7 @@ const QRScanner = () => {
             )}
           </AlertDescription>
           <div className="mt-4 flex justify-end">
-            <Button onClick={startScanning} className="mr-2">
+            <Button onClick={startScanning} className="mr-2 bg-orange-500 hover:bg-black active:bg-black focus:bg-black text-white transition-colors">
               Escanear otro
             </Button>
           </div>

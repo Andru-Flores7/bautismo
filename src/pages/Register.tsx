@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import StudentForm from '@/components/StudentForm';
@@ -23,12 +22,12 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-1 container px-4 py-8">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl font-bold mb-6 text-center">Registro de Alumnos</h1>
+          <h1 className="text-2xl font-bold mb-6 text-center text-orange-400">Registro de Alumnos</h1>
           
           <div className="mb-8">
             <StudentForm onStudentAdded={handleStudentAdded} />

@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -84,8 +83,17 @@
   }
 
   body {
+    
     @apply bg-background text-foreground font-sans;
   }
+}
+
+.main-bg {
+  background-image: url("../public/79949907-icono-de-ojos-de-tigre-sobre-fondo-blanco-ilustración-vectorial.svg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  width: 100vw;
 }
 
 .qr-container {

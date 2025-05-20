@@ -47,8 +47,8 @@ const StudentForm: React.FC<StudentFormProps> = ({ onStudentAdded }) => {
           </div>
           
           <Button 
-            type="submit" 
-            className="w-full" 
+            type="submit"
+            className="w-full bg-orange-500 hover:bg-orange-400 text-white" 
             disabled={isSubmitting}
           >
             {isSubmitting ? "Registrando..." : "Registrar y Generar QR"}

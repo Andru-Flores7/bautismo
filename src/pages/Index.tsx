@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getStats } from '@/utils/storage';
@@ -16,35 +15,35 @@ const Index: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-1 container px-4 py-8">
         <div className="max-w-3xl mx-auto">
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Bautizo QR</h1>
-            <p className="text-gray-600">Sistema de registro y asistencia con códigos QR</p>
+            <h1 className="text-3xl font-bold text-orange-400 mb-2">Bautizo QR</h1>
+            <p className="text-orange-200">Sistema de registro y asistencia con códigos QR</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-2xl">{stats.total}</CardTitle>
-                <CardDescription>Alumnos registrados</CardDescription>
+                <CardTitle className="text-2xl text-orange-400">{stats.total}</CardTitle>
+                <CardDescription className="text-orange-200">Alumnos registrados</CardDescription>
               </CardHeader>
             </Card>
             
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-2xl text-green-600">{stats.attended}</CardTitle>
-                <CardDescription>Asistencias</CardDescription>
+                <CardTitle className="text-2xl text-green-300">{stats.attended}</CardTitle>
+                <CardDescription className="text-orange-200">Asistencias</CardDescription>
               </CardHeader>
             </Card>
             
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-2xl text-orange-500">{stats.notAttended}</CardTitle>
-                <CardDescription>Pendientes</CardDescription>
+                <CardTitle className="text-2xl text-orange-200">{stats.notAttended}</CardTitle>
+                <CardDescription className="text-orange-200">Pendientes</CardDescription>
               </CardHeader>
             </Card>
           </div>
@@ -52,13 +51,13 @@ const Index: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Registrar Alumnos</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-orange-400">Registrar Alumnos</CardTitle>
+                <CardDescription className="text-orange-200">
                   Agrega alumnos y genera códigos QR para cada uno
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button asChild className="w-full">
+                <Button asChild className="w-full bg-orange-500 hover:bg-black active:bg-black focus:bg-black text-white transition-colors">
                   <Link to="/register" className="flex items-center justify-center">
                     <UserPlus className="mr-2 h-5 w-5" />
                     Ir a Registro
@@ -69,13 +68,13 @@ const Index: React.FC = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Escanear Códigos QR</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-orange-400">Escanear Códigos QR</CardTitle>
+                <CardDescription className="text-orange-200">
                   Escanea los códigos QR para registrar asistencia
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button asChild className="w-full">
+                <Button asChild className="w-full bg-black hover:bg-black active:bg-black focus:bg-black text-white transition-colors">
                   <Link to="/scanner" className="flex items-center justify-center">
                     <QrCode className="mr-2 h-5 w-5" />
                     Ir a Scanner
@@ -87,15 +86,47 @@ const Index: React.FC = () => {
         </div>
       </main>
 
-      <footer className="bg-white border-t py-6">
+      <footer className="bg-orange-500 text-white py-6">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-700 font-medium mb-1">DESARROLLADO POR ANDRÉS </p>
-          <p className="text-gray-500 text-sm">
-            E-mail: <a href="mailto:andresflores160200@gmail.com" className="text-blue-500 hover:underline">andresflores160200@gmail.com</a>
+    
+          <p className="text-sm">
+            E-mail: <a href="mailto:andresflores160200@gmail.com" className="text-white hover:underline">andresflores160200@gmail.com</a>
           </p>
-          <p>3884636451</p>
-          <p className="text-gray-400 text-xs mt-2">
-            © {new Date().getFullYear()} Bautizo QR - Sistema de Asistencia
+          <p className="text-sm mt-1">
+            <a href="https://wa.me/543884636451" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">3884636451</a>
+          </p>
+          <div className="flex justify-center my-2">
+            {/* SVG de huella de gato */}
+            <span className="mx-1 opacity-80 transform -rotate-12">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="7" cy="7" rx="2" ry="3" fill="white"/>
+                <ellipse cx="17" cy="7" rx="2" ry="3" fill="white"/>
+                <ellipse cx="12" cy="17" rx="5" ry="4" fill="white"/>
+                <ellipse cx="4" cy="14" rx="1.2" ry="2" fill="white"/>
+                <ellipse cx="20" cy="14" rx="1.2" ry="2" fill="white"/>
+              </svg>
+            </span>
+            <span className="mx-1 opacity-80">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="7" cy="7" rx="2" ry="3" fill="white"/>
+                <ellipse cx="17" cy="7" rx="2" ry="3" fill="white"/>
+                <ellipse cx="12" cy="17" rx="5" ry="4" fill="white"/>
+                <ellipse cx="4" cy="14" rx="1.2" ry="2" fill="white"/>
+                <ellipse cx="20" cy="14" rx="1.2" ry="2" fill="white"/>
+              </svg>
+            </span>
+            <span className="mx-1 opacity-80 transform rotate-12">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="7" cy="7" rx="2" ry="3" fill="white"/>
+                <ellipse cx="17" cy="7" rx="2" ry="3" fill="white"/>
+                <ellipse cx="12" cy="17" rx="5" ry="4" fill="white"/>
+                <ellipse cx="4" cy="14" rx="1.2" ry="2" fill="white"/>
+                <ellipse cx="20" cy="14" rx="1.2" ry="2" fill="white"/>
+              </svg>
+            </span>
+          </div>
+          <p className="text-xs mt-2 text-orange-100">
+            © {new Date().getFullYear()} Tigres QR - Sistema de Asistencia
           </p>
         </div>
       </footer>
