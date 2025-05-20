@@ -57,11 +57,6 @@ const QRScanner = () => {
           });
         } else if (err && err.name !== 'NotFoundException') {
           // NotFoundException es un nombre de error estándar en ZXing
-          toast({
-            title: 'Error de escaneo',
-            description: 'No se pudo detectar ningún código QR válido. Asegúrate de que el QR esté bien enfocado, con buen contraste y completamente visible.',
-            variant: 'destructive',
-          });
           console.error('Error de escaneo:', err);
         }
       });
