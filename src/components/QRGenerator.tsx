@@ -48,11 +48,11 @@ const QRGenerator: React.FC<QRGeneratorProps> = ({ student }) => {
         >
           <QRCodeSVG 
             value={student.qrCode}
-            size={200}
+            size={240} // Más grande
             level="H"
             includeMargin
             bgColor="#FFFFFF"
-            fgColor="#F97316" // Naranja Tailwind: #F97316
+            fgColor="#000000" // Negro puro para máximo contraste
           />
           <div className="mt-2 text-center text-sm font-medium">
             {student.name}
