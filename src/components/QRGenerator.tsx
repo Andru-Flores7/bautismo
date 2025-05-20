@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
@@ -53,14 +52,14 @@ const QRGenerator: React.FC<QRGeneratorProps> = ({ student }) => {
             level="H"
             includeMargin
             bgColor="#FFFFFF"
-            fgColor="#3B82F6"
+            fgColor="#F97316" // Naranja Tailwind: #F97316
           />
           <div className="mt-2 text-center text-sm font-medium">
             {student.name}
           </div>
         </div>
         
-        <Button onClick={downloadQR} className="mt-2">
+        <Button onClick={downloadQR} className="mt-2 bg-orange-500 hover:bg-black active:bg-black focus:bg-black text-white transition-colors">
           Descargar QR
         </Button>
       </CardContent>
