@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { QrCode, UserPlus, User } from 'lucide-react';
+import { UserPlus, User } from 'lucide-react';
 import tigreImg from '../../public/tigre 2.svg';
 
 const Header: React.FC = () => {
@@ -42,17 +42,6 @@ const Header: React.FC = () => {
             <Link to="/register">
               <UserPlus className="h-4 w-4" />
               <span className="hidden sm:inline ml-1">Registrar</span>
-            </Link>
-          </Button>
-          
-          <Button
-            variant={isActive("/scanner") ? "default" : "outline"}
-            asChild
-            className={`flex items-center gap-1 ${isActive("/scanner") ? "bg-black text-white" : "bg-white text-black"}`}
-          >
-            <Link to="/scanner">
-              <QrCode className="h-4 w-4" />
-              <span className="hidden sm:inline ml-1">Escanear</span>
             </Link>
           </Button>
         </div>

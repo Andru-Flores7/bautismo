@@ -4,7 +4,7 @@ import { getStats } from '@/utils/storage';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { QrCode, UserPlus } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 
 const Index: React.FC = () => {
   const [stats, setStats] = useState({ total: 0, attended: 0, notAttended: 0 });
@@ -61,23 +61,6 @@ const Index: React.FC = () => {
                   <Link to="/register" className="flex items-center justify-center">
                     <UserPlus className="mr-2 h-5 w-5" />
                     Ir a Registro
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-orange-400">Escanear Códigos QR</CardTitle>
-                <CardDescription className="text-orange-200">
-                  Escanea los códigos QR para registrar asistencia
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button asChild className="w-full bg-black hover:bg-black active:bg-black focus:bg-black text-white transition-colors">
-                  <Link to="/scanner" className="flex items-center justify-center">
-                    <QrCode className="mr-2 h-5 w-5" />
-                    Ir a Scanner
                   </Link>
                 </Button>
               </CardContent>

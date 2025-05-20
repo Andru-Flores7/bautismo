@@ -50,8 +50,11 @@ const Dashboard: React.FC = () => {
               <CardContent>
                 <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-baptism-blue" 
-                    style={{ width: `${attendancePercentage}%` }}
+                    className="h-full"
+                    style={{ 
+                      width: `${attendancePercentage}%`,
+                      background: `repeating-linear-gradient(135deg, #f97316 0 16px, #000 16px 24px)`
+                    }}
                   ></div>
                 </div>
                 <div className="mt-2 text-sm text-orange-200 text-center">

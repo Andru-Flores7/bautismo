@@ -75,26 +75,52 @@ const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
                         <Check className="mr-1 h-3 w-3" /> {formatDate(student.attendanceDate)}
                       </span>
                     ) : (
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                        Pendiente
-                      </span>
+                      <Button 
+                        size="sm"
+                        className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 text-xs rounded-full"
+                        onClick={() => {
+                          import('@/utils/storage').then(({ markAttendance, getStudents }) => {
+                            markAttendance(student.qrCode);
+                            setStudents(getStudents());
+                            toast({ title: 'Asistencia registrada', description: `Se marcó asistencia para ${student.name}` });
+                          });
+                        }}
+                      >
+                        Marcar presente
+                      </Button>
                     )}
                   </TableCell>
                   <TableCell>
-                    <Button 
-                      variant="destructive" 
-                      size="sm"
-                      onClick={() => {
-                        if (deleteStudent(student.id)) {
-                          setStudents(getStudents());
-                          toast({ title: 'Eliminado', description: 'Alumno eliminado correctamente.' });
-                        } else {
-                          toast({ title: 'Error', description: 'No se pudo eliminar el alumno.', variant: 'destructive' });
-                        }
-                      }}
-                    >
-                      Eliminar
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="border-orange-500 text-orange-500 hover:bg-orange-100"
+                        onClick={() => {
+                          const qrWindow = window.open('', '_blank', 'width=400,height=500');
+                          if (qrWindow) {
+                            qrWindow.document.write(`<!DOCTYPE html><html><head><title>QR de ${student.name}</title></head><body style='display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;'><div id='qr-root'></div><div style='margin-top:16px;font-family:sans-serif;font-size:18px;color:#f97316;font-weight:bold;text-align:center'>${student.name}</div><script src='https://cdn.jsdelivr.net/npm/qrcode.react@1.0.0/umd/qrcode.react.min.js'></script><script>window.onload=function(){QRCodeReact.QRCodeSVG({value:'${student.qrCode}',size:320,level:'H',includeMargin:true,bgColor:'#fff',fgColor:'#000'}).render(document.getElementById('qr-root'))}</script></body></html>`);
+                            qrWindow.document.close();
+                          }
+                        }}
+                      >
+                        Ver QR
+                      </Button>
+                      <Button 
+                        variant="destructive" 
+                        size="sm"
+                        onClick={() => {
+                          if (deleteStudent(student.id)) {
+                            setStudents(getStudents());
+                            toast({ title: 'Eliminado', description: 'Alumno eliminado correctamente.' });
+                          } else {
+                            toast({ title: 'Error', description: 'No se pudo eliminar el alumno.', variant: 'destructive' });
+                          }
+                        }}
+                      >
+                        Eliminar
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
