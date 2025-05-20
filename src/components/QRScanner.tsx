@@ -80,6 +80,11 @@ const QRScanner = () => {
 
   const handleScan = async (result) => {
     stopScanning();
+    // Log visual para depuración
+    toast({
+      title: 'Depuración',
+      description: `QR leído: ${result}`,
+    });
     console.log('Valor recibido por el escáner:', result);
     // Extraer nombre si el QR tiene formato id:nombre
     let nombreQR = '';
@@ -89,6 +94,12 @@ const QRScanner = () => {
       id = partes[0];
       nombreQR = partes.slice(1).join(':');
     }
+    // Mostrar alumnos en localStorage para depuración
+    const alumnos = JSON.parse(localStorage.getItem('students') || '[]');
+    toast({
+      title: 'Depuración',
+      description: `Alumnos en storage: ${alumnos.map(a => a.qrCode).join(' | ')}`,
+    });
     const student = findStudentByQR(result);
     if (!student) {
       setScanResult({
