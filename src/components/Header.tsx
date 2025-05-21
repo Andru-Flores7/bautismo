@@ -41,7 +41,7 @@ const Header: React.FC = () => {
           >
             <Link to="/register">
               <UserPlus className="h-4 w-4" />
-              <span className="hidden sm:inline ml-1">Registrar</span>
+              <span className="hidden sm:inline ml-1">Registro</span>
             </Link>
           </Button>
         </div>
