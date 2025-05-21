@@ -89,7 +89,7 @@
 }
 
 .main-bg {
-  background-image: url("../public/descarga\ \(1\).svg");
+  background-image: url("../public/patas.svg");
   background-size: cover; /* Hace que la imagen siempre cubra el viewport */
   background-repeat: repeat;
 
