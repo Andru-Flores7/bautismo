@@ -89,11 +89,12 @@
 }
 
 .main-bg {
-  background-image: url("../public/piel.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 100vh;
+  background-image: url("../public/descarga\ \(1\).svg");
+  background-size: cover; /* Hace que la imagen siempre cubra el viewport */
+  background-repeat: repeat;
+
+  background-attachment: fixed; /* Mantiene la imagen fija aunque el contenido crezca */
+  min-height: 100vh;
   width: 100vw;
 }
 
