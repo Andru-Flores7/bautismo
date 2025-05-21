@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { UserPlus, User } from 'lucide-react';
-import tigreImg from '../../public/tigre 2.svg';
+import tigreImg from '../../public/tigreheader.svg';
 
 const Header: React.FC = () => {
   const location = useLocation();

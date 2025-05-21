@@ -22,7 +22,7 @@ const Index: React.FC = () => {
         <div className="max-w-3xl mx-auto">
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold text-orange-400 mb-2">Bautizo QR</h1>
-            <p className="text-orange-200">Sistema de registro y asistencia con códigos QR</p>
+            <p className="text-orange-200">Sistema de registro y asistencia </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
