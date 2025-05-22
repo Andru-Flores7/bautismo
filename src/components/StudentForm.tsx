@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { addStudent } from '@/utils/storage';
+import { addStudent, getStudents } from '@/utils/storage';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -16,6 +16,35 @@ const StudentForm: React.FC<StudentFormProps> = ({ onStudentAdded }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name.trim()) {
+      toast({
+        title: "Campo vacío",
+        description: "Por favor ingresa el nombre del alumno antes de registrar.",
+        variant: "destructive",
+      });
+      return;
+    }
+    // Validar solo letras y números (sin caracteres especiales)
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]+$/.test(name.trim())) {
+      toast({
+        title: "Nombre inválido",
+        description: "Solo se permiten letras y números en el nombre.",
+        variant: "destructive",
+      });
+      return;
+    }
+    // Validar que no exista un alumno con el mismo nombre (insensible a mayúsculas/minúsculas)
+    const existing = getStudents().find(
+      s => s.name.trim().toLowerCase() === name.trim().toLowerCase()
+    );
+    if (existing) {
+      toast({
+        title: "Alumno ya registrado",
+        description: "Ese alumno ya está registrado. Elimínalo si deseas volver a ingresarlo.",
+        variant: "destructive",
+      });
+      return;
+    }
     setIsSubmitting(true);
     try {
       addStudent(name);
