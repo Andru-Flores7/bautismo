@@ -14,6 +14,7 @@ interface StudentListProps {
 const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState(''); // Estado para la búsqueda
 
   useEffect(() => {
     setLoading(true);
@@ -21,6 +22,11 @@ const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
     setStudents(students);
     setLoading(false);
   }, [refreshTrigger]);
+
+  // Filtrar alumnos por nombre (insensible a mayúsculas/minúsculas)
+  const filteredStudents = students.filter(student =>
+    student.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   // Format date for display
   const formatDate = (dateString?: string) => {
@@ -52,7 +58,14 @@ const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Alumnos Registrados ({students.length})</CardTitle>
+        <CardTitle>Alumnos Registrados ({filteredStudents.length})</CardTitle>
+        <input
+          type="text"
+          placeholder="Buscar alumno por nombre..."
+          className="mt-2 p-2 border rounded w-full"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
       </CardHeader>
       <CardContent>
         <div className="rounded-md border overflow-hidden">
@@ -66,7 +79,7 @@ const StudentList: React.FC<StudentListProps> = ({ refreshTrigger }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {students.map((student) => (
+              {filteredStudents.map((student) => (
                 <TableRow key={student.id}>
                   <TableCell className="font-medium">{student.name}</TableCell>
                   <TableCell className="hidden md:table-cell">{formatDate(student.registrationDate)}</TableCell>
