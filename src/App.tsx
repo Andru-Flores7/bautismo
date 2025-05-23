@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from 'react';
 import Index from "./pages/Index";
 import Register from "./pages/Register";
-import Scanner from "./pages/Scanner";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
@@ -25,7 +24,6 @@ const App = () => {
               <Route path="/" element={<Dashboard />} />
               <Route path="/index" element={<Index />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/scanner" element={<Scanner />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
