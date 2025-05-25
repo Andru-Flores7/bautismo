@@ -10,14 +10,17 @@ interface QRGeneratorProps {
 }
 
 const QRGenerator: React.FC<QRGeneratorProps> = ({ student }) => {
-  const qrRef = useRef<SVGSVGElement>(null);
+  const qrContainerRef = useRef<HTMLDivElement>(null);
 
-  // Descargar el SVG del QR directamente
+  // Descargar el SVG del QR directamente, compatible con todos los navegadores
   const downloadSVG = () => {
-    if (!qrRef.current) return;
+    if (!qrContainerRef.current) return;
+    // Busca el primer SVG dentro del contenedor
+    const svg = qrContainerRef.current.querySelector('svg');
+    if (!svg) return;
     try {
       const serializer = new XMLSerializer();
-      const svgString = serializer.serializeToString(qrRef.current);
+      const svgString = serializer.serializeToString(svg);
       const blob = new Blob([svgString], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -46,9 +49,8 @@ const QRGenerator: React.FC<QRGeneratorProps> = ({ student }) => {
         <CardTitle className="text-center">Código QR para {student.name}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center">
-        <div className="qr-container mb-4">
+        <div className="qr-container mb-4" ref={qrContainerRef}>
           <QRCodeSVG
-            ref={qrRef}
             value={student.qrCode}
             size={240}
             level="H"
