@@ -17,9 +17,16 @@ const QRGenerator: React.FC<QRGeneratorProps> = ({ student }) => {
   const downloadPNG = async () => {
     if (!qrContainerRef.current) return;
     try {
-      const canvas = await html2canvas(qrContainerRef.current.querySelector("svg") as HTMLElement, {
+      // Clona el SVG y lo inserta en un div temporal para renderizarlo como HTML
+      const svgElement = qrContainerRef.current.querySelector('svg');
+      if (!svgElement) throw new Error('No se encontró el SVG del QR');
+      const tempDiv = document.createElement('div');
+      tempDiv.appendChild(svgElement.cloneNode(true));
+      document.body.appendChild(tempDiv);
+      const canvas = await html2canvas(tempDiv, {
         backgroundColor: "#fff"
       });
+      document.body.removeChild(tempDiv);
       const url = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.href = url;
