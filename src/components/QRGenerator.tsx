@@ -21,6 +21,12 @@ const QRGenerator: React.FC<QRGeneratorProps> = ({ student }) => {
       const svgElement = qrContainerRef.current.querySelector('svg');
       if (!svgElement) throw new Error('No se encontró el SVG del QR');
       const tempDiv = document.createElement('div');
+      tempDiv.style.display = 'flex';
+      tempDiv.style.alignItems = 'center';
+      tempDiv.style.justifyContent = 'center';
+      tempDiv.style.width = '240px';
+      tempDiv.style.height = '240px';
+      tempDiv.style.background = '#fff';
       tempDiv.appendChild(svgElement.cloneNode(true));
       document.body.appendChild(tempDiv);
       const canvas = await html2canvas(tempDiv, {
