@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Student } from '@/utils/storage';
+import html2canvas from "html2canvas";
 
 interface QRGeneratorProps {
   student: Student;
@@ -12,27 +13,23 @@ interface QRGeneratorProps {
 const QRGenerator: React.FC<QRGeneratorProps> = ({ student }) => {
   const qrContainerRef = useRef<HTMLDivElement>(null);
 
-  // Descargar el SVG del QR directamente, compatible con todos los navegadores
-  const downloadSVG = () => {
+  // Descargar el QR como PNG para máxima compatibilidad móvil
+  const downloadPNG = async () => {
     if (!qrContainerRef.current) return;
-    // Busca el primer SVG dentro del contenedor
-    const svg = qrContainerRef.current.querySelector('svg');
-    if (!svg) return;
     try {
-      const serializer = new XMLSerializer();
-      const svgString = serializer.serializeToString(svg);
-      const blob = new Blob([svgString], { type: 'image/svg+xml' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const canvas = await html2canvas(qrContainerRef.current.querySelector("svg") as HTMLElement, {
+        backgroundColor: "#fff"
+      });
+      const url = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `qr-${student.name.replace(/\s+/g, '-').toLowerCase()}.svg`;
+      link.download = `qr-${student.name.replace(/\s+/g, "-").toLowerCase()}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
       toast({
         title: "Éxito",
-        description: "QR descargado correctamente",
+        description: "QR descargado correctamente como PNG",
       });
     } catch (error) {
       toast({
@@ -62,7 +59,7 @@ const QRGenerator: React.FC<QRGeneratorProps> = ({ student }) => {
             {student.name}
           </div>
         </div>
-        <Button onClick={downloadSVG} className="mt-2 bg-orange-500 hover:bg-black active:bg-black focus:bg-black text-white transition-colors">
+        <Button onClick={downloadPNG} className="mt-2 bg-orange-500 hover:bg-black active:bg-black focus:bg-black text-white transition-colors">
           Descargar QR
         </Button>
       </CardContent>
